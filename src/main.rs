@@ -3,7 +3,7 @@ mod hash_builder;
 
 use std::sync::{Arc};
 use alloy_consensus::BlockHeader;
-use reth_stateless::{stateless_validation_with_trie, StatelessTrie};
+use reth_stateless::{stateless_validation_with_trie};
 use guest_libs::senders::recover_block;
 use {
     reth_chainspec::{ ChainSpec, ChainSpecBuilder},
@@ -17,40 +17,7 @@ use {
 };
 use stateless_trie_bench::{build_execution_witness, get_state_root};
 
-
-
 fn main() {
-    // let witness = build_execution_witness();
-    // let state_
-    // let mut ancestor_headers: Vec<_> = witness
-    //     .headers
-    //     .iter()
-    //     .map(|bytes| {
-    //         let hash = keccak256(bytes);
-    //         alloy_rlp::decode_exact::<Header>(bytes)
-    //             .map(|h| SealedHeader::new(h, hash))
-    //             .map_err(|_| StatelessValidationError::HeaderDeserializationFailed)
-    //     })
-    //     .collect::<Result<_, _>>().unwrap();
-    // // Sort the headers by their block number to ensure that they are in
-    // // ascending order.
-    // ancestor_headers.sort_by_key(|header| header.number());
-    //
-    //
-    // // There should be at least one ancestor header.
-    // // The edge case here would be the genesis block, but we do not create proofs for the genesis
-    // // block.
-    // let parent = match ancestor_headers.last() {
-    //     Some(prev_header) => prev_header,
-    //     None => panic!("Parent not in ancestor headers"),
-    // };
-    //
-    // let sparse_state = time!(SparseState::new(&witness, parent.state_root).unwrap().0);
-    // let acc = time!(sparse_state.account(Address::from(hex!("0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b"))));
-    // if acc.is_err() {
-    //     panic!("Account not found");
-    // }
-
     let witness = build_execution_witness();
 
     let header = alloy_consensus::Header
