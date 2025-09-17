@@ -1,6 +1,6 @@
-mod zeth_trie;
 mod hash_builder;
 use std::sync::Arc;
+use guest_libs::mpt::SparseState;
 use guest_libs::senders::recover_block;
 use {
     reth_chainspec::ChainSpec,
@@ -38,7 +38,7 @@ fn main() {
 
     now = Instant::now();
     let r1 =
-        stateless_validation_with_trie::<zeth_trie::SparseState, ChainSpec, EthEvmConfig>(
+        stateless_validation_with_trie::<SparseState, ChainSpec, EthEvmConfig>(
             recovered_block.clone(),
             input.witness.clone(),
             chain_spec.clone(),
