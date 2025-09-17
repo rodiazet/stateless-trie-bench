@@ -4437,6 +4437,7 @@ dependencies = [
  "reth-trie-common 1.7.0",
  "revm-bytecode",
  "risc0-ethereum-trie",
+ "serde_json",
  "zeth-core",
 ]
 
