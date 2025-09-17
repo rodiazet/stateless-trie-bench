@@ -1,7 +1,5 @@
 mod zeth_trie;
 mod hash_builder;
-
-use std::env;
 use std::sync::Arc;
 use guest_libs::senders::recover_block;
 use {
