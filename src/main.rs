@@ -1,13 +1,13 @@
 mod hash_builder;
-use std::sync::Arc;
 use guest_libs::mpt::SparseState;
 use guest_libs::senders::recover_block;
+use stateless_trie_bench::{get_test_file_path, load_stateless_input};
+use std::sync::Arc;
 use {
     reth_chainspec::ChainSpec,
-    reth_stateless::{validation::stateless_validation, Genesis, stateless_validation_with_trie},
     reth_evm_ethereum::EthEvmConfig,
+    reth_stateless::{Genesis, stateless_validation_with_trie, validation::stateless_validation},
 };
-use stateless_trie_bench::{get_test_file_path, load_stateless_input};
 
 fn main() {
     let input = load_stateless_input(&get_test_file_path());
@@ -27,7 +27,7 @@ fn main() {
         recovered_block.clone(),
         input.witness.clone(),
         chain_spec.clone(),
-        evm_config.clone()
+        evm_config.clone(),
     );
 
     println!("{:?}", now.elapsed());
@@ -37,13 +37,12 @@ fn main() {
     }
 
     now = Instant::now();
-    let r1 =
-        stateless_validation_with_trie::<SparseState, ChainSpec, EthEvmConfig>(
-            recovered_block.clone(),
-            input.witness.clone(),
-            chain_spec.clone(),
-            evm_config.clone()
-        );
+    let r1 = stateless_validation_with_trie::<SparseState, ChainSpec, EthEvmConfig>(
+        recovered_block.clone(),
+        input.witness.clone(),
+        chain_spec.clone(),
+        evm_config.clone(),
+    );
     println!("{:?}", now.elapsed());
     if r1.is_err() {
         panic!("Error")
