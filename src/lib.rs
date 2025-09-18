@@ -16,6 +16,10 @@ pub fn load_stateless_input(path_str: &String) -> StatelessInput {
     serde_json::from_reader::<_, StatelessInput>(std::fs::File::open(path_str).unwrap()).unwrap()
 }
 
+pub fn load_execution_witness(path_str: &String) -> ExecutionWitness {
+    serde_json::from_reader::<_, ExecutionWitness>(std::fs::File::open(path_str).unwrap()).unwrap()
+}
+
 pub fn get_state_root(witness: &ExecutionWitness) -> B256 {
     let mut ancestor_headers: Vec<_> = witness
         .headers

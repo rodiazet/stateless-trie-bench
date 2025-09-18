@@ -4,12 +4,12 @@ use criterion::{criterion_group, criterion_main, Criterion};
 use guest_libs::mpt::SparseState;
 use reth_stateless::StatelessTrie;
 use reth_stateless::trie::StatelessSparseTrie;
-use stateless_trie_bench::{get_state_root, load_stateless_input};
+use stateless_trie_bench::{get_state_root, load_execution_witness};
 
-static TEST_FILE: &str = "test_data/test.json";
+static TEST_FILE: &str = "test_data/mainnet_block_164E2F4_test.json";
 
 fn benchmark_stateless_trie_create<T: StatelessTrie>(c: &mut Criterion) {
-    let witness = load_stateless_input(&String::from(TEST_FILE)).witness.clone();
+    let witness = load_execution_witness(&String::from(TEST_FILE)).clone();
     let state_root = get_state_root(&witness);
 
     let trie = T::new(&witness, state_root);
@@ -22,7 +22,7 @@ fn benchmark_stateless_trie_create<T: StatelessTrie>(c: &mut Criterion) {
 }
 
 fn benchmark_stateless_trie_account<T: StatelessTrie>(c: &mut Criterion) {
-    let witness = load_stateless_input(&String::from(TEST_FILE)).witness.clone();
+    let witness = load_execution_witness(&String::from(TEST_FILE)).clone();
     let state_root = get_state_root(&witness);
     let trie = T::new(&witness, state_root).unwrap().0;
 
