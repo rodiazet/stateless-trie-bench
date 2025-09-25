@@ -1,11 +1,14 @@
+use std::sync::Arc;
+use std::time::Duration;
 use alloy_primitives::{Address, FixedBytes};
 use criterion::{Criterion, criterion_group, criterion_main};
 use guest_libs::mpt::SparseState;
-use reth_stateless::StatelessTrie;
+use guest_libs::senders::recover_block;
+use reth_chainspec::ChainSpec;
+use reth_evm_ethereum::EthEvmConfig;
+use reth_stateless::{stateless_validation_with_trie, Genesis, StatelessTrie};
 use reth_stateless::trie::StatelessSparseTrie;
-use stateless_trie_bench::{
-    build_storage_hash_map, get_state_root, init_trie, load_execution_witness,
-};
+use stateless_trie_bench::{build_storage_hash_map, get_state_root, get_test_file_path, init_trie, load_execution_witness, load_stateless_input};
 
 static TEST_FILE: &str = "test_data/mainnet_block_164E2F4_test.json";
 
@@ -70,13 +73,47 @@ fn benchmark_stateless_trie_storage<T: StatelessTrie>(c: &mut Criterion) {
     );
 }
 
+fn benchmark_stateless_validation<T: StatelessTrie>(c: &mut Criterion) {
+    let input = load_stateless_input(&String::from("test_data/rpc_block_23439901.json"));
+
+    let genesis = Genesis {
+        config: input.chain_config.clone(),
+        ..Default::default()
+    };
+    let chain_spec: Arc<ChainSpec> = Arc::new(genesis.into());
+    let recovered_block = recover_block(input.block, &chain_spec).unwrap();
+    let evm_config = EthEvmConfig::new(chain_spec.clone());
+
+    c.bench_function(
+        format!("stateless validation {}", std::any::type_name::<T>()).as_str(),
+        |b| {
+            b.iter(|| {
+                let r = stateless_validation_with_trie::<T, _, _>(
+                    recovered_block.clone(),
+                    input.witness.clone(),
+                    chain_spec.clone(),
+                    evm_config.clone(),
+                );
+
+                if r.is_err() {
+                    panic!("Error")
+                }
+            })
+        },
+    );
+}
+
 criterion_group!(
-    benches,
-    benchmark_stateless_trie_create::<SparseState>,
-    benchmark_stateless_trie_create::<StatelessSparseTrie>,
-    benchmark_stateless_trie_account::<SparseState>,
-    benchmark_stateless_trie_account::<StatelessSparseTrie>,
-    benchmark_stateless_trie_storage::<SparseState>,
-    benchmark_stateless_trie_storage::<StatelessSparseTrie>
+    name = benches;
+    config = Criterion::default().measurement_time(Duration::new(10, 00));
+    targets = 
+    // benchmark_stateless_trie_create::<SparseState>,
+    // benchmark_stateless_trie_create::<StatelessSparseTrie>,
+    // benchmark_stateless_trie_account::<SparseState>,
+    // benchmark_stateless_trie_account::<StatelessSparseTrie>,
+    // benchmark_stateless_trie_storage::<SparseState>,
+    // benchmark_stateless_trie_storage::<StatelessSparseTrie>,
+    benchmark_stateless_validation::<SparseState>,
+    benchmark_stateless_validation::<StatelessSparseTrie>
 );
 criterion_main!(benches);
