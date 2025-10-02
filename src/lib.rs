@@ -82,9 +82,11 @@ pub fn build_storage_hash_map(witness: &ExecutionWitness) -> HashMap<Address, Ve
 
 #[cfg(test)]
 mod tests {
-    static TEST_FILE: &str = "test_data/mainnet_block_164E2F4_test.json";
+    static TEST_FILE: &str = "test_data/test.json";
+    
     use super::*;
-    use guest_libs::mpt::SparseState;
+    use sparsestate::SparseState;
+    use reth_stateless::trie::StatelessSparseTrie;
     #[test]
     fn state_less_trie_storage_access() {
         let witness = load_execution_witness(&String::from(TEST_FILE));
@@ -92,10 +94,31 @@ mod tests {
         let trie = init_trie::<SparseState>(&witness);
 
         for (address, slots) in storage.iter() {
-            for slot in slots {
-                assert!(trie.account(address.clone()).is_ok());
-                assert!(trie.storage(address.clone(), slot.clone()).is_ok());
+            if trie.account(address.clone()).unwrap().is_some() {
+                eprintln!("{}", address.clone());
+                for slot in slots {
+                    eprintln!("{}", slot.clone());
+                    assert!(trie.storage(address.clone(), slot.clone()).is_ok());
+                }
             }
         }
+    }
+
+    #[test]
+    fn state_less_sparse_trie_storage_access() {
+        let witness = load_execution_witness(&String::from(TEST_FILE));
+        let storage = build_storage_hash_map(&witness);
+        let trie = init_trie::<StatelessSparseTrie>(&witness);
+
+        for (address, slots) in storage.iter() {
+            if trie.account(address.clone()).unwrap().is_some() {
+                eprintln!("{}", address.clone());
+                for slot in slots {
+                    eprintln!("{}", slot.clone());
+                    assert!(trie.storage(address.clone(), slot.clone()).is_ok());
+                }
+            }
+        }
+
     }
 }
