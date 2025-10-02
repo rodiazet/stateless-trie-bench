@@ -2,7 +2,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use alloy_primitives::{Address, FixedBytes};
 use criterion::{Criterion, criterion_group, criterion_main};
-use guest_libs::mpt::SparseState;
+use sparsestate::SparseState;
 use guest_libs::senders::recover_block;
 use reth_chainspec::ChainSpec;
 use reth_evm_ethereum::EthEvmConfig;
