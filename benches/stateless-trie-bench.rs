@@ -3,12 +3,11 @@ use std::time::Duration;
 use alloy_primitives::{Address, FixedBytes};
 use criterion::{Criterion, criterion_group, criterion_main};
 use sparsestate::SparseState;
-use guest_libs::senders::recover_block;
 use reth_chainspec::ChainSpec;
 use reth_evm_ethereum::EthEvmConfig;
 use reth_stateless::{stateless_validation_with_trie, Genesis, StatelessTrie};
 use reth_stateless::trie::StatelessSparseTrie;
-use stateless_trie_bench::{build_storage_hash_map, get_state_root, get_test_file_path, init_trie, load_execution_witness, load_stateless_input};
+use stateless_trie_bench::{build_storage_hash_map, get_state_root, init_trie, load_execution_witness, load_stateless_input};
 
 static TEST_FILE: &str = "test_data/mainnet_block_164E2F4_test.json";
 
@@ -81,7 +80,6 @@ fn benchmark_stateless_validation<T: StatelessTrie>(c: &mut Criterion) {
         ..Default::default()
     };
     let chain_spec: Arc<ChainSpec> = Arc::new(genesis.into());
-    let recovered_block = recover_block(input.block, &chain_spec).unwrap();
     let evm_config = EthEvmConfig::new(chain_spec.clone());
 
     c.bench_function(
@@ -89,7 +87,8 @@ fn benchmark_stateless_validation<T: StatelessTrie>(c: &mut Criterion) {
         |b| {
             b.iter(|| {
                 let r = stateless_validation_with_trie::<T, _, _>(
-                    recovered_block.clone(),
+                    input.block.clone(),
+                    Vec::default(),
                     input.witness.clone(),
                     chain_spec.clone(),
                     evm_config.clone(),
