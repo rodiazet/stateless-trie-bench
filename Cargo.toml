@@ -15,12 +15,15 @@ reth-chainspec = { git = "https://github.com/kevaundray/reth", rev = "5b4c3a6d75
 reth-primitives-traits = { git = "https://github.com/kevaundray/reth", rev = "5b4c3a6d75de93c3ad5d2c8c2740c63cb7e74afb", default-features = false }
 reth-ethereum-primitives = { git = "https://github.com/kevaundray/reth", rev = "5b4c3a6d75de93c3ad5d2c8c2740c63cb7e74afb", default-features = false, features = ["serde", "serde-bincode-compat"] }
 sparsestate = { path = "/Users/rodia/projects/zkvm-ethereum-mpt/crates/sparsestate", default-features = false }
-simple-sparse-state = { git = "https://github.com/rodiazet/zkvm-ethereum-mpt.git", branch = "simple-trie", default-features = false }
+simple-sparse-state = { path = "/Users/rodia/projects/zkvm-ethereum-mpt/crates/simple-sparse-state" } # git = "https://github.com/rodiazet/zkvm-ethereum-mpt.git", branch = "simple-trie", default-features = false }
+guest-libs = { git = "https://github.com/eth-act/zkevm-benchmark-workload.git", rev = "105443370827e17bf1aa6972cb2a35c6437a9dd8" }
+anyhow = "1.0"
 
 criterion = { version = "0.7.0", features = ["html_reports"]}
 serde_json = "1.0.145"
 serde_with = "3.14.0"
 serde = "1.0.228"
+critical-section = { version = "1", features = ["std"] }
 
 
 [[bench]]

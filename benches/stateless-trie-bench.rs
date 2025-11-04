@@ -3,11 +3,13 @@ use std::time::Duration;
 use alloy_primitives::{Address, FixedBytes};
 use criterion::{Criterion, criterion_group, criterion_main};
 use sparsestate::SparseState;
+use simple_sparse_state;
 use reth_chainspec::ChainSpec;
 use reth_evm_ethereum::EthEvmConfig;
 use reth_stateless::{stateless_validation_with_trie, Genesis, StatelessTrie};
 use reth_stateless::trie::StatelessSparseTrie;
 use stateless_trie_bench::{build_storage_hash_map, get_state_root, init_trie, load_execution_witness, load_stateless_input};
+use guest_libs::senders::recover_signers;
 
 static TEST_FILE: &str = "test_data/mainnet_block_164E2F4_test.json";
 
@@ -82,6 +84,9 @@ fn benchmark_stateless_validation<T: StatelessTrie>(c: &mut Criterion) {
     let chain_spec: Arc<ChainSpec> = Arc::new(genesis.into());
     let evm_config = EthEvmConfig::new(chain_spec.clone());
 
+    let signers = recover_signers(input.block.body.transactions.iter())
+        .map_err(|err| anyhow::anyhow!("recovering signers: {err}"));
+
     c.bench_function(
         format!("stateless validation {}", std::any::type_name::<T>()).as_str(),
         |b| {
@@ -112,7 +117,8 @@ criterion_group!(
     // benchmark_stateless_trie_account::<StatelessSparseTrie>,
     // benchmark_stateless_trie_storage::<SparseState>,
     // benchmark_stateless_trie_storage::<StatelessSparseTrie>,
-    benchmark_stateless_validation::<SparseState>,
-    benchmark_stateless_validation::<StatelessSparseTrie>
+    // benchmark_stateless_validation::<SparseState>,
+    // benchmark_stateless_validation::<StatelessSparseTrie>,
+    benchmark_stateless_validation::<simple_sparse_state::SimpleSparseState>
 );
 criterion_main!(benches);

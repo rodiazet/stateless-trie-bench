@@ -1,6 +1,4 @@
 {
-  "name": "rpc_block_23439901",
-  "block_and_witness": {
     "block": {
       "header": {
         "parent_hash": "0x322e05f3f9ec4baf383113d50746d9e6fcc4c925396771b68fc7859366b0cbbe",
@@ -17457,6 +17455,4 @@
       "blob_schedule": {},
       "extra_fields": {}
     }
-  },
-  "success": true
-}
+  }

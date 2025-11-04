@@ -4,24 +4,9 @@ use alloy_primitives::{Address, B256, FixedBytes, U256, keccak256};
 use reth_ethereum_primitives::Block;
 use reth_primitives_traits::SealedHeader;
 use reth_stateless::validation::StatelessValidationError;
-use reth_stateless::{ExecutionWitness, StatelessTrie};
+use reth_stateless::{ExecutionWitness, StatelessTrie, UncompressedPublicKey, StatelessInput};
 use std::collections::HashMap;
 use std::env;
-
-// /// `StatelessInput` is a convenience structure for serializing the input needed
-// /// for the stateless validation function.
-// #[serde_with::serde_as]
-#[derive(Clone, Debug, Default, serde::Serialize, serde::Deserialize)]
-pub struct StatelessInput {
-    /// The block being executed in the stateless validation function
-    // #[serde_as(
-    //     as = "reth_primitives_traits::serde_bincode_compat::Block<reth_ethereum_primitives::TransactionSigned, alloy_consensus::Header>"
-    // )]
-    pub block: Block,
-    /// `ExecutionWitness` for the stateless validation function
-    pub witness: ExecutionWitness,
-    pub chain_config: ChainConfig,
-}
 
 pub fn get_test_file_path() -> String {
     let args: Vec<String> = env::args().collect();

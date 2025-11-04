@@ -8,6 +8,9 @@ use {
     reth_evm_ethereum::EthEvmConfig,
     reth_stateless::{Genesis, stateless_validation_with_trie, validation::stateless_validation},
 };
+use guest_libs::senders::recover_signers;
+use anyhow;
+use simple_sparse_state;
 
 fn main() {
     let input = load_stateless_input(&get_test_file_path());
@@ -22,9 +25,12 @@ fn main() {
     use std::time::Instant;
     let mut now = Instant::now();
 
+    let public_keys = recover_signers(input.block.body.transactions.iter())
+        .map_err(|err| anyhow::anyhow!("recovering signers: {err}")).unwrap();
+
     let r = stateless_validation(
         input.block.clone(),
-        Vec::default(),
+        public_keys.clone(),
         input.witness.clone(),
         chain_spec.clone(),
         evm_config.clone(),
@@ -39,13 +45,26 @@ fn main() {
     now = Instant::now();
     let r1 = stateless_validation_with_trie::<SparseState, ChainSpec, EthEvmConfig>(
         input.block.clone(),
-        Vec::default(),
+        public_keys.clone(),
         input.witness.clone(),
         chain_spec.clone(),
         evm_config.clone(),
     );
     println!("{:?}", now.elapsed());
     if r1.is_err() {
+        panic!("Error")
+    }
+
+    now = Instant::now();
+    let r2 = stateless_validation_with_trie::<simple_sparse_state::SimpleSparseState, ChainSpec, EthEvmConfig>(
+        input.block.clone(),
+        public_keys.clone(),
+        input.witness.clone(),
+        chain_spec.clone(),
+        evm_config.clone(),
+    );
+    println!("{:?}", now.elapsed());
+    if r2.is_err() {
         panic!("Error")
     }
 }
