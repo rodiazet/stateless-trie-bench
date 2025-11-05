@@ -11,6 +11,8 @@ use {
 use guest_libs::senders::recover_signers;
 use anyhow;
 use simple_sparse_state;
+use std::fmt::Display;
+
 
 fn main() {
     let input = load_stateless_input(&get_test_file_path());
@@ -28,19 +30,19 @@ fn main() {
     let public_keys = recover_signers(input.block.body.transactions.iter())
         .map_err(|err| anyhow::anyhow!("recovering signers: {err}")).unwrap();
 
-    let r = stateless_validation(
-        input.block.clone(),
-        public_keys.clone(),
-        input.witness.clone(),
-        chain_spec.clone(),
-        evm_config.clone(),
-    );
-
-    println!("{:?}", now.elapsed());
-
-    if r.is_err() {
-        panic!("Error")
-    }
+    // let r = stateless_validation(
+    //     input.block.clone(),
+    //     public_keys.clone(),
+    //     input.witness.clone(),
+    //     chain_spec.clone(),
+    //     evm_config.clone(),
+    // );
+    //
+    // println!("{:?}", now.elapsed());
+    //
+    // if r.is_err() {
+    //     panic!("Error")
+    // }
 
     now = Instant::now();
     let r1 = stateless_validation_with_trie::<SparseState, ChainSpec, EthEvmConfig>(
@@ -55,6 +57,7 @@ fn main() {
         panic!("Error")
     }
 
+    println!("--------");
     now = Instant::now();
     let r2 = stateless_validation_with_trie::<simple_sparse_state::SimpleSparseState, ChainSpec, EthEvmConfig>(
         input.block.clone(),
