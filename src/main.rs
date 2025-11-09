@@ -30,19 +30,19 @@ fn main() {
     let public_keys = recover_signers(input.block.body.transactions.iter())
         .map_err(|err| anyhow::anyhow!("recovering signers: {err}")).unwrap();
 
-    // let r = stateless_validation(
-    //     input.block.clone(),
-    //     public_keys.clone(),
-    //     input.witness.clone(),
-    //     chain_spec.clone(),
-    //     evm_config.clone(),
-    // );
-    //
-    // println!("{:?}", now.elapsed());
-    //
-    // if r.is_err() {
-    //     panic!("Error")
-    // }
+    let r = stateless_validation(
+        input.block.clone(),
+        public_keys.clone(),
+        input.witness.clone(),
+        chain_spec.clone(),
+        evm_config.clone(),
+    );
+    
+    println!("{:?}", now.elapsed());
+    
+    if r.is_err() {
+        panic!("Error")
+    }
 
     now = Instant::now();
     let r1 = stateless_validation_with_trie::<SparseState, ChainSpec, EthEvmConfig>(
