@@ -2,7 +2,7 @@ mod hash_builder;
 
 use std::sync::Arc;
 use sparsestate::SparseState;
-use stateless_trie_bench::{get_test_file_path, load_stateless_input};
+use stateless_trie_bench::{get_state_root, get_test_file_path, load_execution_witness, load_stateless_input};
 use {
     reth_chainspec::ChainSpec,
     reth_evm_ethereum::EthEvmConfig,
@@ -12,9 +12,29 @@ use guest_libs::senders::recover_signers;
 use anyhow;
 use simple_sparse_state;
 use std::fmt::Display;
+use alloy_primitives::{Address, FixedBytes};
+use reth_stateless::StatelessTrie;
 
-
+static TEST_FILE: &str = "test_data/mainnet_block_164E2F4_test.json";
 fn main() {
+    let witness = load_execution_witness(&String::from(TEST_FILE));
+    let state_root = get_state_root(&witness);
+    let trie = simple_sparse_state::SimpleSparseState::new(&witness, state_root).unwrap().0;
+    
+    let addresses: Vec<Address> = witness
+        .keys
+        .iter()
+        .filter(|key| key.len() == 20)
+        .map(|key| Address::from(FixedBytes::<20>::from_slice(key)))
+        .collect();
+    
+    for n in 1..=500 {
+        let trie_copy = trie.clone();
+        for address in addresses.iter() {
+            assert!(trie_copy.account(address.clone()).is_ok());
+        }
+    }
+
     let input = load_stateless_input(&get_test_file_path());
 
     let genesis = Genesis {
@@ -37,9 +57,9 @@ fn main() {
         chain_spec.clone(),
         evm_config.clone(),
     );
-    
+
     println!("{:?}", now.elapsed());
-    
+
     if r.is_err() {
         panic!("Error")
     }
@@ -66,8 +86,8 @@ fn main() {
         chain_spec.clone(),
         evm_config.clone(),
     );
-    println!("{:?}", now.elapsed());
     if r2.is_err() {
         panic!("Error")
     }
+    println!("{:?}", now.elapsed());
 }

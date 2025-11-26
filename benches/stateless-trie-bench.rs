@@ -85,7 +85,7 @@ fn benchmark_stateless_validation<T: StatelessTrie>(c: &mut Criterion) {
     let evm_config = EthEvmConfig::new(chain_spec.clone());
 
     let signers = recover_signers(input.block.body.transactions.iter())
-        .map_err(|err| anyhow::anyhow!("recovering signers: {err}"));
+        .map_err(|err| anyhow::anyhow!("recovering signers: {err}")).unwrap();
 
     c.bench_function(
         format!("stateless validation {}", std::any::type_name::<T>()).as_str(),
@@ -93,7 +93,7 @@ fn benchmark_stateless_validation<T: StatelessTrie>(c: &mut Criterion) {
             b.iter(|| {
                 let r = stateless_validation_with_trie::<T, _, _>(
                     input.block.clone(),
-                    Vec::default(),
+                    signers.clone(),
                     input.witness.clone(),
                     chain_spec.clone(),
                     evm_config.clone(),
@@ -111,14 +111,17 @@ criterion_group!(
     name = benches;
     config = Criterion::default().measurement_time(Duration::new(10, 00));
     targets = 
-    // benchmark_stateless_trie_create::<SparseState>,
-    // benchmark_stateless_trie_create::<StatelessSparseTrie>,
-    // benchmark_stateless_trie_account::<SparseState>,
-    // benchmark_stateless_trie_account::<StatelessSparseTrie>,
-    // benchmark_stateless_trie_storage::<SparseState>,
-    // benchmark_stateless_trie_storage::<StatelessSparseTrie>,
-    // benchmark_stateless_validation::<SparseState>,
-    // benchmark_stateless_validation::<StatelessSparseTrie>,
+    benchmark_stateless_trie_create::<SparseState>,
+    benchmark_stateless_trie_create::<StatelessSparseTrie>,
+    benchmark_stateless_trie_create::<simple_sparse_state::SimpleSparseState>,
+    benchmark_stateless_trie_account::<SparseState>,
+    benchmark_stateless_trie_account::<StatelessSparseTrie>,
+    benchmark_stateless_trie_account::<simple_sparse_state::SimpleSparseState>,
+    benchmark_stateless_trie_storage::<SparseState>,
+    benchmark_stateless_trie_storage::<StatelessSparseTrie>,
+    benchmark_stateless_trie_storage::<simple_sparse_state::SimpleSparseState>,
+    benchmark_stateless_validation::<SparseState>,
+    benchmark_stateless_validation::<StatelessSparseTrie>,
     benchmark_stateless_validation::<simple_sparse_state::SimpleSparseState>
 );
 criterion_main!(benches);
