@@ -1,10 +1,8 @@
-use alloy_genesis::ChainConfig;
 use alloy_consensus::Header;
 use alloy_primitives::{Address, B256, FixedBytes, U256, keccak256};
-use reth_ethereum_primitives::Block;
 use reth_primitives_traits::SealedHeader;
 use reth_stateless::validation::StatelessValidationError;
-use reth_stateless::{ExecutionWitness, StatelessTrie, UncompressedPublicKey, StatelessInput};
+use reth_stateless::{ExecutionWitness, StatelessTrie, StatelessInput};
 use std::collections::HashMap;
 use std::env;
 

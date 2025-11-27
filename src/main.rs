@@ -2,7 +2,7 @@ mod hash_builder;
 
 use std::sync::Arc;
 use sparsestate::SparseState;
-use stateless_trie_bench::{get_state_root, get_test_file_path, load_execution_witness, load_stateless_input};
+use stateless_trie_bench::{get_test_file_path, load_stateless_input};
 use {
     reth_chainspec::ChainSpec,
     reth_evm_ethereum::EthEvmConfig,
@@ -11,15 +11,8 @@ use {
 use guest_libs::senders::recover_signers;
 use anyhow;
 use simple_sparse_state;
-use std::fmt::Display;
-use alloy_primitives::{Address, FixedBytes};
-use reth_stateless::StatelessTrie;
 
-static TEST_FILE: &str = "test_data/mainnet_block_164E2F4_test.json";
 fn main() {
-    let witness = load_execution_witness(&String::from(TEST_FILE));
-    let state_root = get_state_root(&witness);
-
     let input = load_stateless_input(&get_test_file_path());
 
     let genesis = Genesis {
