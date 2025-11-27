@@ -1080,9 +1080,9 @@ dependencies = [
 
 [[package]]
 name = "crc"
-version = "3.3.0"
+version = "3.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9710d3b3739c2e349eb44fe848ad0b7c8cb1e42bd87ee49371df2f7acaf3e675"
+checksum = "5eb8a2a1cd12ab0d987a5d5e825195d372001a4094a0376319d5a0ad71c1ba0d"
 dependencies = [
  "crc-catalog",
 ]
@@ -2077,7 +2077,7 @@ dependencies = [
 [[package]]
 name = "mpt"
 version = "0.1.0"
-source = "git+https://github.com/rodiazet/zkvm-ethereum-mpt.git?rev=9594e37687f4d6803af3565f62954554f7e8595c#9594e37687f4d6803af3565f62954554f7e8595c"
+source = "git+https://github.com/rodiazet/zkvm-ethereum-mpt.git?rev=1db928100add010a04ec6434e756be7850ce209c#1db928100add010a04ec6434e756be7850ce209c"
 dependencies = [
  "alloy-primitives",
  "alloy-rlp",
@@ -3623,7 +3623,7 @@ dependencies = [
 [[package]]
 name = "simple-sparse-state"
 version = "0.1.0"
-source = "git+https://github.com/rodiazet/zkvm-ethereum-mpt.git?rev=9594e37687f4d6803af3565f62954554f7e8595c#9594e37687f4d6803af3565f62954554f7e8595c"
+source = "git+https://github.com/rodiazet/zkvm-ethereum-mpt.git?rev=1db928100add010a04ec6434e756be7850ce209c#1db928100add010a04ec6434e756be7850ce209c"
 dependencies = [
  "alloy-primitives",
  "alloy-trie 0.9.1",
@@ -3637,7 +3637,7 @@ dependencies = [
 [[package]]
 name = "simple-trie"
 version = "0.1.0"
-source = "git+https://github.com/rodiazet/zkvm-ethereum-mpt.git?rev=9594e37687f4d6803af3565f62954554f7e8595c#9594e37687f4d6803af3565f62954554f7e8595c"
+source = "git+https://github.com/rodiazet/zkvm-ethereum-mpt.git?rev=1db928100add010a04ec6434e756be7850ce209c#1db928100add010a04ec6434e756be7850ce209c"
 dependencies = [
  "alloy-primitives",
  "alloy-rlp",
@@ -3662,7 +3662,7 @@ dependencies = [
 [[package]]
 name = "sparsestate"
 version = "0.1.0"
-source = "git+https://github.com/rodiazet/zkvm-ethereum-mpt.git?rev=9594e37687f4d6803af3565f62954554f7e8595c#9594e37687f4d6803af3565f62954554f7e8595c"
+source = "git+https://github.com/rodiazet/zkvm-ethereum-mpt.git?rev=1db928100add010a04ec6434e756be7850ce209c#1db928100add010a04ec6434e756be7850ce209c"
 dependencies = [
  "alloy-primitives",
  "alloy-rlp",
@@ -3934,9 +3934,9 @@ dependencies = [
 
 [[package]]
 name = "tracing"
-version = "0.1.42"
+version = "0.1.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8eb41cbdb933e23b7929f47bb577710643157d7602ef3a2ebd3902b13ac5eda6"
+checksum = "784e0ac535deb450455cbfa28a6f0df145ea1bb7ae51b821cf5e7927fdcfbdd0"
 dependencies = [
  "pin-project-lite",
  "tracing-attributes",
@@ -4208,9 +4208,9 @@ dependencies = [
 
 [[package]]
 name = "winnow"
-version = "0.7.13"
+version = "0.7.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "21a0236b59786fed61e2a80582dd500fe61f18b5dca67a4a067d0bc9039339cf"
+checksum = "5a5364e9d77fcdeeaa6062ced926ee3381faa2ee02d3eb83a5c27a8825540829"
 dependencies = [
  "memchr",
 ]

@@ -12,8 +12,8 @@ reth-evm-ethereum = { git = "https://github.com/kevaundray/reth", rev = "5b4c3a6
 reth-stateless = { git = "https://github.com/kevaundray/reth", rev = "5b4c3a6d75de93c3ad5d2c8c2740c63cb7e74afb" }
 reth-chainspec = { git = "https://github.com/kevaundray/reth", rev = "5b4c3a6d75de93c3ad5d2c8c2740c63cb7e74afb", default-features = false }
 reth-primitives-traits = { git = "https://github.com/kevaundray/reth", rev = "5b4c3a6d75de93c3ad5d2c8c2740c63cb7e74afb", default-features = false }
-sparsestate =  { git = "https://github.com/rodiazet/zkvm-ethereum-mpt.git", rev = "9594e37687f4d6803af3565f62954554f7e8595c", default-features = false }
-simple-sparse-state = { git = "https://github.com/rodiazet/zkvm-ethereum-mpt.git", rev = "9594e37687f4d6803af3565f62954554f7e8595c", default-features = false }
+sparsestate =  { git = "https://github.com/rodiazet/zkvm-ethereum-mpt.git", rev = "1db928100add010a04ec6434e756be7850ce209c", default-features = false }
+simple-sparse-state = { git = "https://github.com/rodiazet/zkvm-ethereum-mpt.git", rev = "1db928100add010a04ec6434e756be7850ce209c", default-features = false }
 guest-libs = { git = "https://github.com/eth-act/zkevm-benchmark-workload.git", rev = "105443370827e17bf1aa6972cb2a35c6437a9dd8" }
 anyhow = "1.0"
 
